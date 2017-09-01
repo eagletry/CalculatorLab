@@ -128,6 +128,8 @@ namespace CPE200Lab1
                     break;
                 case "%":
                     // your code here
+                    firstOperand = lblDisplay.Text;
+                    isAfterEqual = true;
                     break;
             }
             isAllowBack = false;
@@ -207,6 +209,7 @@ namespace CPE200Lab1
             if (lblDisplay.Text is "Error")
             {
                 return;
+
             }
             if (isAfterEqual)
             {
