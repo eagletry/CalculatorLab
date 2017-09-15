@@ -1,52 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CPE200Lab1
 {
-    class RPNCalculatorEngine : CalculatorEngine
+    public class RPNCalculatorEngine : CalculatorEngine
     {
-        public string Process(string str)
+        public new string Process(string str)
         {
-            Stack mystack = new Stack();
-            // split str to parts
+            Stack<string> rpnStack = new Stack<string>();
+            List<string> parts = str.Split(' ').ToList<string>();
+            string result;
+            string firstOperand, secondOperand;
 
-            string[] parts = str.Split(' ');
-             
-            // loop each part
-            for(int i = 0; i < parts.Length; i++)
+            foreach (string token in parts)
             {
-                if(isOperator(parts[i]))
+                if (isNumber(token))
                 {
-                    string firstoperand, secondoperand;
-                    secondoperand = Convert.ToString(mystack.Pop());
-                    firstoperand = Convert.ToString(mystack.Pop());
-                    mystack.Push (calculate(parts[i], firstoperand, secondoperand,4));
-                    
+                    rpnStack.Push(token);
                 }
-                else
+                else if (isOperator(token))
                 {
-                    if (isNumber(parts[i]))
+                    //FIXME, what if there is only one left in stack?
+                    secondOperand = rpnStack.Pop();
+                    firstOperand = rpnStack.Pop();
+                    result = calculate(token, firstOperand, secondOperand, 4);
+                    if (result is "E")
                     {
-                        mystack.Push(parts[i]);
+                        return result;
                     }
-                    
+                    rpnStack.Push(result);
                 }
-                
             }
-            return mystack.Pop().ToString();
-            // if part is number
-            // push to stack
-            // if part is operator
-            // pop two times => second, first operand
-            // calculate(oerator, first, second) => result
-            // push result to stack
-            // return result;
-            //jjguguj
-
+            //FIXME, what if there is more than one, or zero, items in the stack?
+            result = rpnStack.Pop();
+            return result;
         }
     }
 }
